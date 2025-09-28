@@ -1,0 +1,23 @@
+import { sqliteTable, AnySQLiteColumn, integer, text, numeric, index } from "drizzle-orm/sqlite-core"
+  import { sql } from "drizzle-orm"
+
+export const d1Migrations = sqliteTable("d1_migrations", {
+	id: integer().primaryKey({ autoIncrement: true }),
+	name: text(),
+	appliedAt: numeric("applied_at").default(sql`(CURRENT_TIMESTAMP)`).notNull(),
+});
+
+export const patterns = sqliteTable("patterns", {
+	id: text().primaryKey(),
+	name: text().notNull(),
+	width: integer().notNull(),
+	height: integer().notNull(),
+	gridData: text("grid_data").notNull(),
+	colorsData: text("colors_data").notNull(),
+	createdAt: numeric("created_at").default(sql`(CURRENT_TIMESTAMP)`),
+	updatedAt: numeric("updated_at").default(sql`(CURRENT_TIMESTAMP)`),
+},
+(table) => [
+	index("idx_patterns_updated_at").on(table.updatedAt),
+]);
+
